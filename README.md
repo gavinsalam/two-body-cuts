@@ -1,1 +1,1 @@
-# two-body-cuts
+# Two-body cuts
