@@ -1,7 +1,7 @@
 # Two-body cuts
 
 ![](https://img.shields.io/badge/C%2B%2B-11-green)
-[![](https://img.shields.io/badge/arXiv:-2006.nnnnn-blue)](https://arxiv.org/abs/2006.nnnnn)
+<!-- [![](https://img.shields.io/badge/arXiv-2006.nnnnn-blue)](https://arxiv.org/abs/2006.nnnnn) -->
 
 
 Code that implements a variety of cuts for selecting two-body kinematics
@@ -22,4 +22,4 @@ Various examples are provided:
 To compile, the code requires
 
 - a C++11 compiler
-- an installation of fastjet
+- an installation of [FastJet](http://fastjet.fr)
