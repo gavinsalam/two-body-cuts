@@ -19,7 +19,18 @@ namespace tbc {
 //template <class T> using lclvector = ArrVec<T,10>;
 template <class T> using lclvector = ArrVec<T,6>;
 
-/// class to hold a range 
+/// class to hold a range, which means a (possibly non-continuous)
+/// subset of the interval 0 to 1 (those values are represented as LO
+/// and HI in the class).
+///
+/// One of the main purposes of a RealRange is that it implements
+/// logical operations between RealRanges, making it easy to put
+/// together a range of constraints as long as the can easily be mapped
+/// to a common 0..1 region.
+///
+/// Internally, the range is held as an ordered vector of
+/// non-overlapping RealRange:Segment objects, each of which contains a
+/// continuous subset of the interval 0 to 1.
 class RealRange {
 public:
   class Segment {
@@ -59,8 +70,8 @@ public:
       return value >= lo_ && value <= hi_;
     }
 
-    /// merges the other segment with this one, assuming they are
-    /// not distinct
+    /// merges the other segment with this one (i.e. logical or),
+    /// assuming they are not distinct
     Segment & merge(const Segment & other) {
       assert(!distinct(other));
       lo_ = std::min(lo_, other.lo_);
@@ -68,6 +79,8 @@ public:
       return *this;
     }
 
+    /// intersects the other segment with this one (i.e. logical and),
+    /// assuming they are not distinct
     Segment & intersect(const Segment & other) {
       assert(!distinct(other));
       lo_ = std::max(lo_, other.lo_);
@@ -95,14 +108,18 @@ public:
   /// sets the range back to an empty range
   RealRange & reset() {segments_.resize(0); return *this;}
 
+  /// returns the segments of which this range is composed.
   const lclvector<Segment> & segments() const {return segments_;}
 
+  /// returns the total extent of the range, i.e. the sum of the extents 
+  /// of the segments of which it is composed.
   double extent() const {
     double result = 0;
     for (const auto & s: segments()) result += s.extent();
     return result;
   }
 
+  /// returns true if the range contains the specified value
   bool contains(double value) const {
     for (const auto & s: segments()) {
       if (s.contains(value)) return true;
@@ -110,12 +127,20 @@ public:
     return false;
   }
 
+  /// returns the number of separate segments of which this range
+  /// is composed.
   unsigned size() const {return segments().size();}
+
+  /// returns true if the range is empty (i.e. not point is contained
+  /// within it)
   bool is_empty() const {return segments().size() == 0;}
 
+  /// performs (local) logical or of this range with the other
   RealRange & operator|=(const RealRange & other);
+  /// performs (local) logical and of this range with the other
   RealRange & operator&=(const RealRange & other);
 
+  /// returns true if this range is identical to the other
   bool operator==(const RealRange & other) const {
     if (size() != other.size()) return false;
     for (unsigned i = 0; i < size(); i++) {
@@ -124,9 +149,10 @@ public:
     return true;
   }
 
+  /// returns true if this range differs to the other
   bool operator!=(const RealRange & other) const {return !(*this == other);}
 
-  ~RealRange() {}//{std::cout << size() << " " << segments().capacity() << std::endl;}
+  ~RealRange() {}
 
   /// returns a veto range such that 
   /// (*this && veto).extent() - this->extent() == amount_to_veto
@@ -218,7 +244,9 @@ RealRange operator!(const RealRange & other) {
   return RealRange(new_segments);
 }
 
-
+/// Returns the result of the logical or operation between ranges a and
+/// b. E.g. if a=[0.0,0.2][0.4,0.6] and b=[0.3,0.5], the result is 
+/// [0.0,0.2][0.3,0.6]
 RealRange operator||(const RealRange & a, const RealRange & b) {
   typedef RealRange::Segment Segment;
   if (a.is_empty()) return b;
@@ -256,6 +284,9 @@ RealRange operator||(const RealRange & a, const RealRange & b) {
 }
 
 
+/// Returns the result of the logical and operation between ranges a and
+/// b. E.g. if a=[0.0,0.2][0.4,0.6] and b=[0.3,0.5], the result is 
+/// [0.4,0.5]
 RealRange operator&&(const RealRange & a, const RealRange & b) {
   typedef RealRange::Segment Segment;
   if (a.is_empty() || b.is_empty()) return RealRange();
