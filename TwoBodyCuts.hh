@@ -42,6 +42,19 @@ public:
     _selector &= !(fastjet::SelectorRapRange(rap1,rap2));
   }
 
+  // add an upper cut on |rapidity|
+  virtual void add_upper_absrap_cut(double absrap) {
+    add_upper_rap_cut( std::abs(absrap));
+    add_lower_rap_cut(-std::abs(absrap));
+  }
+  // add an absolute rapidity exclusion band between |absrap1| and |absrap2|
+  virtual void add_absrap_exclusion(double absrap1, double absrap2) {
+    add_rap_exclusion( std::abs(absrap1),  std::abs(absrap2));
+    add_rap_exclusion(-std::abs(absrap2), -std::abs(absrap1));
+  }
+
+  virtual ~CutsBase() {}
+
   const fastjet::Selector & selector() const {return _selector;}
 protected:
 
@@ -57,7 +70,7 @@ protected:
 /// normal cuts
 class CutsNormal : public CutsBase {
 public:
-  CutsNormal(double ptsoft, double pthard, fastjet::Selector selector) : 
+  CutsNormal(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
     CutsBase(ptsoft, pthard, selector) {}
 
   bool pass(const Boson & b) const override {
@@ -80,11 +93,13 @@ public:
 
 };
 
+typedef CutsNormal CutsAsymmetric;
+
 /// staggered cuts, where pthard is applied to boson.p1
 /// and ptsoft is applied to boson.p2
 class CutsStaggered : public CutsBase {
 public:
-  CutsStaggered(double ptsoft, double pthard, fastjet::Selector selector) : 
+  CutsStaggered(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
     CutsBase(ptsoft, pthard, selector) {}
 
   bool pass(const Boson & b) const override {
@@ -108,7 +123,7 @@ public:
 /// and min(boson.p1.pt(), boson.p2.pt()) > ptsoft
 class CutsSum : public CutsBase {
 public:
-  CutsSum(double ptsoft, double pthard, fastjet::Selector selector) : 
+  CutsSum(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
     CutsBase(ptsoft, pthard, selector) {}
 
   bool pass(const Boson & b) const override {
@@ -136,7 +151,7 @@ public:
 /// and min(boson.p1.pt(), boson.p2.pt()) > ptsoft
 class CutsProduct : public CutsBase {
 public:
-  CutsProduct(double ptsoft, double pthard, fastjet::Selector selector) : 
+  CutsProduct(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
     CutsBase(ptsoft, pthard, selector) {}
 
   bool pass(const Boson & b) const override {
@@ -165,7 +180,7 @@ public:
 /// and min(boson.p1.pt(), boson.p2.pt()) > ptsoft
 class CutsPtCS : public CutsBase {
 public:
-  CutsPtCS(double ptsoft, double pthard, fastjet::Selector selector) : 
+  CutsPtCS(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
     CutsBase(ptsoft, pthard, selector) {}
 
   bool pass(const Boson & b) const override {
@@ -197,7 +212,7 @@ public:
 /// class gives results that are identical to CutsPtCS
 class CutsCBIPt : public CutsBase {
 public:
-  CutsCBIPt(double ptsoft, double pthard, fastjet::Selector selector) : 
+  CutsCBIPt(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
     CutsBase(ptsoft, pthard, selector) {}
 
   void set_DY_mode(bool val = true) {_DY_mode = val;}
