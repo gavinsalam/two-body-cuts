@@ -3,12 +3,21 @@
 #include "fastjet/PseudoJet.hh"
 
 
+namespace tbc {
+
 class Boson;
 std::ostream & operator<<(std::ostream & ostr, const Boson & b);
 
 
 class Boson : public fastjet::PseudoJet {
 public:
+  /// create a boson from the two input fastjet::PseudoJets
+  Boson(const fastjet::PseudoJet & p1_in, const fastjet::PseudoJet & p2_in) {
+    p1 = p1_in;
+    p2 = p2_in;
+    reset_momentum(sum());
+  }
+
   /// create a boson at zero pt and zero rapidity
   /// with decay kinematics given by theta and phi,
   /// defined in the Collins-Soper frame
@@ -26,12 +35,17 @@ public:
     boost(boost_y);
   }  
 
-  /// create a boson from the two input fastjet::PseudoJets
-  Boson(const fastjet::PseudoJet & p1_in, const fastjet::PseudoJet & p2_in) {
-    p1 = p1_in;
-    p2 = p2_in;
-    reset_momentum(sum());
-  }
+  /// create a boson the specified pt (in the x direction) and rapidity
+  /// as well as decay kinematics
+  Boson(double mass, double theta, double phi, double ptx, double pty, double rap) {
+    init(mass, theta, phi);
+    double phib = atan2(pty, ptx);
+    double pt = sqrt(ptx*ptx + pty*pty);
+    fastjet::PseudoJet boost_pt = fastjet::PtYPhiM(pt , phib, 0, mass);
+    fastjet::PseudoJet boost_y  = fastjet::PtYPhiM(0  , rap , 0, mass);
+    boost(boost_pt);
+    boost(boost_y);
+  }  
 
   const fastjet::PseudoJet & operator()() const {
     return *this;
@@ -54,86 +68,11 @@ public:
     return p1+p2;
   }
 
-//  Boson z_mirrored_copy() const {
-//    // determine the boosts
-//    fastjet::PseudoJet rap_boost = PtYPhiM(0, rap(), 0, 1);
-//    fastjet::PseudoJet pt_boost = fastjet::PseudoJet(px()/m(), py()/m(),0,1.0);
-//    // take a copy and get it into the rest frame
-//    Boson copy1 = *this;
-//    copy1.unboost(rap_boost);
-//    copy1.unboost(pt_boost);
-//    // get a 2nd copy where we have mirrored the z components
-//    Boson copy2(
-//      fastjet::PseudoJet(copy1.p1.px(), copy1.p1.py(), -copy1.p1.pz(), copy1.p1.E()),
-//      fastjet::PseudoJet(copy1.p2.px(), copy1.p2.py(), -copy1.p2.pz(), copy1.p2.E())
-//    );
-//    // boost it back to the proper pt and rapidity
-//    copy2.boost(pt_boost);
-//    copy2.boost(rap_boost);
-//    return copy2;
-//  }
-//
-//  Boson zcos_mirrored_copy(double abs_cos_threshold) const {
-//    // determine the boosts
-//    fastjet::PseudoJet rap_boost = PtYPhiM(0, rap(), 0, 1);
-//    // take a copy and get it into the rest frame
-//    Boson copy1 = *this;
-//    copy1.unboost(rap_boost);
-//    fastjet::PseudoJet pt_boost = copy1;
-//    copy1.unboost(pt_boost);
-//    double rest_costheta = copy1.p1.pz()/copy1.p1.modp();
-//    double rest_phi      = atan2(copy1.p1.py(), copy1.p1.px());
-//    // first mirror cos around abs_cos_threshold
-//    double new_costheta = rest_costheta;
-//    if (std::abs(rest_costheta) > abs_cos_threshold) {
-//      // watch out when abs_cos_threshold < 1/2
-//      new_costheta = abs_cos_threshold - (std::abs(rest_costheta) - abs_cos_threshold);
-//      if (rest_costheta < 0) new_costheta = -new_costheta;
-//    } 
-//    // and now do the z mirroring
-//    new_costheta = -new_costheta;
-//
-//    // get a 2nd copy where we have mirrored the z components
-//    Boson copy2(copy1.m(), acos(new_costheta), rest_phi);
-//    copy2.boost(pt_boost);
-//    copy2.boost(rap_boost);
-//    // cout << copy1 << endl;
-//    // cout << "---- " << rest_costheta << " " << sqrt(1-decay_sinsq_theta()) << " " << sqrt(1-copy1.decay_sinsq_theta()) << " " << new_costheta << " " << sqrt(1-copy2.decay_sinsq_theta()) << endl;
-//    return copy2;
-//    //   fastjet::PseudoJet(copy1.p1.px(), copy1.p1.py(), -copy1.p1.pz(), copy1.p1.E()),
-//    //   fastjet::PseudoJet(copy1.p2.px(), copy1.p2.py(), -copy1.p2.pz(), copy1.p2.E())
-//    // );
-//    // // boost it back to the proper pt and rapidity
-//    // copy2.boost(pt_boost);
-//    // copy2.boost(rap_boost);
-//    // return copy2;
-//  }
-//
-//
-//  Boson xy_mirrored_copy() const {
-//    // determine the boosts
-//    fastjet::PseudoJet rap_boost = PtYPhiM(0, rap(), 0, 1);
-//    fastjet::PseudoJet pt_boost = fastjet::PseudoJet(px()/m(), py()/m(),0,1.0);
-//    // take a copy and get it into the rest frame
-//    Boson copy1 = *this;
-//    copy1.unboost(rap_boost);
-//    copy1.unboost(pt_boost);
-//    // get a 2nd copy where we have mirrored the z components
-//    Boson copy2(
-//      fastjet::PseudoJet(-copy1.p1.px(), -copy1.p1.py(), +copy1.p1.pz(), copy1.p1.E()),
-//      fastjet::PseudoJet(-copy1.p2.px(), -copy1.p2.py(), +copy1.p2.pz(), copy1.p2.E())
-//    );
-//    // boost it back to the proper pt and rapidity
-//    copy2.boost(pt_boost);
-//    copy2.boost(rap_boost);
-//    return copy2;
-//  }
-//
 
-  // enquiry functions
+  /// \defgroup EnquiryFunction Enquiry functions
+  /// @{
   /// returns the sin^2(theta) where theta is the decay
   /// angle in the boson rest frame 
-  /// (check Collins-Soper angle correspondence)
   double decay_sinsq_theta() const {
     fastjet::PseudoJet Delta_t = fastjet::PseudoJet(p1.px()-p2.px(), p1.py()-p2.py(), 0.0, 0.0);
     fastjet::PseudoJet pinv = Delta_t;
@@ -197,6 +136,9 @@ public:
     else return this_decay_phi;
   }
 
+  /// @}
+
+
   fastjet::PseudoJet p1,p2;
 
 protected:
@@ -211,6 +153,7 @@ protected:
   }
 };
 
+#ifndef TBC_NOPJIO
 std::ostream & operator<<(std::ostream & ostr, const fastjet::PseudoJet & p) {
   ostr << p.px() << " "
        << p.py() << " "
@@ -221,6 +164,7 @@ std::ostream & operator<<(std::ostream & ostr, const fastjet::PseudoJet & p) {
        << "y="  << p.rap() << " ";
   return ostr;
 }
+
 std::ostream & operator<<(std::ostream & ostr, const Boson & b) {
   ostr << "boson: " << b() 
        << " ptCS=" << b.pt_CS()
@@ -231,6 +175,7 @@ std::ostream & operator<<(std::ostream & ostr, const Boson & b) {
        << "   p2: " << b.p2 << std::endl;
   return ostr;
 }
-
+#endif // TBC_NOPJIO
+}
 
 #endif // __BOSON_HH__

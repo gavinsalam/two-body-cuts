@@ -10,6 +10,9 @@
 #include <stdexcept>
 #include <cmath>
 
+namespace tbc {
+
+
 class CutsBase {
 public:
   CutsBase(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
@@ -727,5 +730,7 @@ private:
   double _higher_pthard = -1.0;
 
 };
+
+} // end of tbc namespace
 
 #endif // __TWOBODYCUTS_HH__

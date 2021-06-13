@@ -2,6 +2,8 @@
 #include<array>
 #include<algorithm>
 
+namespace tbc {
+
 template<class T, unsigned int maxarrsize = 10>
 class ArrVec {
 public:
@@ -111,3 +113,5 @@ private:
   std::vector<T> vector_;
   size_t size_ = 0;
 };
+
+} // end of tbc namespace
