@@ -68,6 +68,32 @@ public:
     return p1+p2;
   }
 
+  Boson & operator*=(double val) {
+    reset_momentum(sum()*val);
+    p1 *= val;
+    p2 *= val;
+    return *this;
+  }
+
+  Boson operator*(double val) {
+    Boson result = *this;
+    result *= val;
+    return result;
+  }
+
+
+  Boson & operator/=(double val) {
+    reset_momentum(sum()/val);
+    p1 /= val;
+    p2 /= val;
+    return *this;
+  }
+
+  Boson operator/(double val) {
+    Boson result = *this;
+    result /= val;
+    return result;
+  }
 
   /// \defgroup EnquiryFunction Enquiry functions
   /// @{
@@ -153,9 +179,16 @@ protected:
   }
 };
 
+Boson operator*(double val, const Boson & other) {
+  Boson result = other;
+  result *=val;
+  return result;
+}
+
 #ifndef TBC_NOPJIO
 std::ostream & operator<<(std::ostream & ostr, const fastjet::PseudoJet & p) {
-  ostr << p.px() << " "
+  ostr << "px,y,z,E= "
+       << p.px() << " "
        << p.py() << " "
        << p.pz() << " "
        << p.E() << " "
