@@ -8,6 +8,6 @@ Various examples are provided:
 - example1.cc: simple usage given kinematics for each of two decay
   products
 
-- example2.cc: illustrates Monte Carlo calculation of acceptance for
-  given Higgs kinematics, including the full setup of the CBI_HR cuts
-  (with an additional raised threshold at high rapidities).
+- example2.cc: illustrates a Monte Carlo calculation of the acceptance
+  for given Higgs kinematics, including the full setup of the CBI_HR
+  cuts (with an additional raised threshold at high rapidities).
