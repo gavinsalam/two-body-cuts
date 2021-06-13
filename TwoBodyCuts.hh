@@ -717,7 +717,7 @@ public:
   std::string description() const override {
     std::ostringstream ostr;
     ostr << "Compensating Boost Invariant cuts (compensation accounts for hardness and rapidity) with ptmin > " << _ptsoft
-         << ", ptCS > " << _pthard;
+         << ", ptCS > " << _pthard << "(flexible for compensation)";
     if (_higher_pthard >= 0) ostr << " (raised to " << _higher_pthard
                                   << " for |yB| > " << _abs_rap_for_higher_pthard << ")";
     if (_pthard_max != _pthard_max_default) ostr << ", ptCS < " << _pthard_max;
