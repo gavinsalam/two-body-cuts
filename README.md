@@ -10,14 +10,17 @@ at hadron colliders, including the cuts from
 
 Various examples are provided:
 
-- [example1.cc](example1.cc): shows simple usage given the kinematics
+- [code/example1.cc](code/example1.cc): shows simple usage given the kinematics
   for each of two decay products
 
-- [example2.cc](example2.cc): illustrates a Monte Carlo calculation of
+- [code/example2.cc](code/example2.cc): illustrates a Monte Carlo calculation of
   the acceptance for specific Higgs kinematics, with the full setup of
   the cuts whose acceptance shows the least dependence on the Higgs
   boson transverse momentum, CBI_HR cuts (including an additional raised
-  threshold at high rapidities).
+  hardness threshold at high rapidities).
+
+See the start of each file for instructions on building and running the
+executable.
 
 ## Dependencies
 
