@@ -52,7 +52,13 @@ int main(int argc, char** argv) {
        << ", yH = " << yH
        << ", mH = " << mH << endl;
 
-  // choose a random number generator and a number of events
+  // choose a random number generator and a number of events.
+  //
+  // NB: if you want to loop over different Higgs kinematic
+  //     points in order to examine the ptH dependence, it is
+  //     a good idea to use the same starting seed for each
+  //     ptH, so that statistical errors are correlated 
+  //     across the pTH points.
   unsigned nev = 1000000;
   int seed = 5;
   mt19937 generator(seed);
@@ -68,7 +74,8 @@ int main(int argc, char** argv) {
     // choose uniform random orientation for the Higgs decay
     double phi = phi_dist(generator);
     double theta = acos(costheta_dist(generator));
-    // create boson and evaluate whether it passes each of the cuts
+    // create boson (which by default is boosted along the x axis) and
+    // evaluate whether it passes each of the cuts
     Boson boson(mH,theta,phi,ptH,yH);
     for (unsigned icut = 0; icut < cuts.size(); icut++) {
       if (cuts[icut]->pass(boson/boson.m())) npass[icut] += 1.0;
