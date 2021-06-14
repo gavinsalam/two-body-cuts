@@ -10,7 +10,7 @@ at hadron colliders, including the cuts from
 
 Various examples are provided:
 
-- [code/example1.cc](code/example1.cc): shows simple usage given the kinematics
+- [code/example1.cc](code/example1.cc): shows simple usage, given the kinematics
   for each of two decay products
 
 - [code/example2.cc](code/example2.cc): illustrates a Monte Carlo calculation of
