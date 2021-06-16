@@ -334,7 +334,7 @@ public:
   std::string description() const override {
     std::ostringstream ostr; 
     ostr << "Compensating Boost Invariant cuts (compensation uses only hardness): ptmin > " << _ptsoft 
-         << " && ptCS > "  << _pthard << "(unless compensated)"
+         << " && ptCS > "  << _pthard << " (unless compensated)"
          << " && a selector(" << _selector.description() << ") applied to each decay product";
     if (_DY_mode) ostr << ", DY mode turned on";
     return ostr.str();

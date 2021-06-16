@@ -20,20 +20,23 @@ COMMONSRC =
 F77SRC = 
 COMMONOBJ = 
 
-PROGSRC = example1.cc example2.cc
-PROGOBJ = example1.o example2.o
+PROGSRC = example1.cc example2.cc example3.cc
+PROGOBJ = example1.o example2.o example3.o
 
 INCLUDE += 
 LIBRARIES += 
 
 
-all:  example1 example2 
+all:  example1 example2 example3 
 
 
 example1: example1.o  $(COMMONOBJ)
 	$(CXX) $(LDFLAGS) -o $@ $@.o $(COMMONOBJ) $(LIBRARIES)
 
 example2: example2.o  $(COMMONOBJ)
+	$(CXX) $(LDFLAGS) -o $@ $@.o $(COMMONOBJ) $(LIBRARIES)
+
+example3: example3.o  $(COMMONOBJ)
 	$(CXX) $(LDFLAGS) -o $@ $@.o $(COMMONOBJ) $(LIBRARIES)
 
 
@@ -44,7 +47,7 @@ clean:
 	rm -vf $(COMMONOBJ) $(PROGOBJ)
 
 realclean: clean
-	rm -vf  example1 example2 
+	rm -vf  example1 example2 example3 
 
 .cc.o:         $<
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
@@ -94,3 +97,19 @@ example2.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/Rang
 example2.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/LimitedWarning.hh
 example2.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/internal/thread_safety_helpers.hh
 example2.o: Boson.hh RealRange.hh ArrVec.hh
+example3.o: TwoBodyCuts.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/Selector.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/PseudoJet.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/config.h
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/config_auto.h
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/internal/numconsts.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/internal/base.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/internal/IsBase.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/SharedPtr.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/internal/deprecated.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/Error.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/PseudoJetStructureBase.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/RangeDefinition.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/LimitedWarning.hh
+example3.o: /Users/gsalam/work/fastjet/fastjet-installation/include/fastjet/internal/thread_safety_helpers.hh
+example3.o: Boson.hh RealRange.hh ArrVec.hh

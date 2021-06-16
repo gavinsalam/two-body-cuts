@@ -13,11 +13,16 @@ Various examples are provided:
 - [code/example1.cc](code/example1.cc): shows simple usage, given the kinematics
   for each of two decay products
 
-- [code/example2.cc](code/example2.cc): illustrates a Monte Carlo calculation of
-  the acceptance for specific Higgs kinematics, with the full setup of
-  the cuts whose acceptance shows the least dependence on the Higgs
-  boson transverse momentum, CBI_HR cuts (including an additional raised
-  hardness threshold at high rapidities).
+- [code/example2.cc](code/example2.cc): illustrates a Monte Carlo
+  calculation of the acceptance for specific Higgs kinematics, with the
+  full setup of the cuts whose acceptance shows the least dependence on
+  the Higgs boson transverse momentum, CBI_HR cuts from section 5 of the
+  paper (including an additional raised hardness threshold at high
+  rapidities).
+
+- [code/example3.cc](code/example3.cc): a similar program that evaluates
+  harmonic acceptances for Z production for a variety of cuts, 
+  illustrating also the use of the CBI_{H,DY} cuts shown in section 6 of the paper.
 
 See the start of each file for instructions on building and running the
 executable.
