@@ -28,7 +28,7 @@ Various examples are provided:
   illustrating also the use of the CBI_{H,DY} cuts shown in section 6 of the paper.
 
 See the start of each file for instructions on building and running the
-executable.
+executables.
 
 
 
