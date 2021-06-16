@@ -1,5 +1,5 @@
-// This file is part of the two-body-cuts project
-// Copyright [2021] [Gavin Salam and Emma Slade]
+// This file is part of the two-body-cuts project.
+// Copyright 2021, Gavin Salam and Emma Slade (University of Oxford)
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
