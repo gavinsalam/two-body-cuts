@@ -1,3 +1,18 @@
+// This file is part of the two-body-cuts project
+// Copyright [2021] [Gavin Salam and Emma Slade]
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #ifndef __BOSON_HH__
 #define __BOSON_HH__
 #include "fastjet/PseudoJet.hh"
@@ -8,7 +23,9 @@ namespace tbc {
 class Boson;
 std::ostream & operator<<(std::ostream & ostr, const Boson & b);
 
-
+/// Class to represent a two-particle final-state. It's generically
+/// called a "Boson", because the main application investigated
+/// so far has been for Higgs and Z boson selections 
 class Boson : public fastjet::PseudoJet {
 public:
   /// create a boson from the two input fastjet::PseudoJets
@@ -51,12 +68,15 @@ public:
     return *this;
   }
 
+  /// boost this boson (modifying the object) and return a reference to it
   Boson & boost(const fastjet::PseudoJet & boost_vector) {
     p1.boost(boost_vector);
     p2.boost(boost_vector);
     reset_momentum(sum());
     return *this;
   }
+
+  /// unboost this boson (modifying the object) and return a reference to it
   Boson & unboost(const fastjet::PseudoJet & boost_vector) {
     p1.unboost(boost_vector);
     p2.unboost(boost_vector);
@@ -164,7 +184,7 @@ public:
 
   /// @}
 
-
+  /// the momenta of the two decay products
   fastjet::PseudoJet p1,p2;
 
 protected:
