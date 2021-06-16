@@ -10,8 +10,11 @@ at hadron colliders, including the cuts from
 
 Various examples are provided:
 
-- [code/example1.cc](code/example1.cc): shows simple usage, given the kinematics
-  for each of two decay products
+- [code/example1.cc](code/example1.cc): shows simple usage of the cuts,
+  given the kinematics for each of two decay products. The cuts
+  themselves are available through the
+  [code/TwoBodyCuts.hh](code/TwoBodyCuts.hh) file, and are in the `tbc`
+  namespace.
 
 - [code/example2.cc](code/example2.cc): illustrates a Monte Carlo
   calculation of the acceptance for specific Higgs kinematics, with the
@@ -26,6 +29,8 @@ Various examples are provided:
 
 See the start of each file for instructions on building and running the
 executable.
+
+
 
 ## Dependencies
 
