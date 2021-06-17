@@ -1,12 +1,12 @@
 # Two-body cuts
 
 ![](https://img.shields.io/badge/C%2B%2B-11-green)
-<!-- [![](https://img.shields.io/badge/arXiv-2006.nnnnn-blue)](https://arxiv.org/abs/2006.nnnnn) -->
+[![](https://img.shields.io/badge/arXiv-2106.08329-blue)](https://arxiv.org/abs/2106.08329)
 
 
 Code that implements a variety of cuts for selecting two-body kinematics
 at hadron colliders, including the cuts from
-[arXiv:2006.nnnnn](https://arxiv.org/abs/2006.nnnnn).
+[arXiv:2106.08329](https://arxiv.org/abs/2106.08329).
 
 Various examples are provided:
 

@@ -1,4 +1,6 @@
 // This file is part of the two-body-cuts project.
+// It implements the two-body cuts from https://arxiv.org/abs/2106.08329
+//
 // Copyright 2021, Gavin Salam and Emma Slade (University of Oxford)
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +29,7 @@
 
 namespace tbc {
 
-
+/// Base class for cuts
 class CutsBase {
 public:
   CutsBase(double ptsoft, double pthard, fastjet::Selector selector = fastjet::SelectorIdentity()) : 
