@@ -8,7 +8,7 @@ Code that implements a variety of cuts for selecting two-body kinematics
 at hadron colliders, including the cuts from
 [arXiv:2106.08329](https://arxiv.org/abs/2106.08329).
 
-Various examples are provided:`
+Various examples are provided:
 
 - [code/example1.cc](code/example1.cc): shows simple usage of the cuts,
   given the kinematics for each of two decay products. The cuts
