@@ -803,8 +803,16 @@ public:
     return true;
   }
 
+  std::string description() const override {
+    std::ostringstream ostr; 
+    ostr << "Defiducialisable symmetric cut with ptmin >= " << _ptsoft 
+         << " and rapidity cuts = " << _selector.description();
+    return ostr.str();
+  }
+
   /// Returns the acceptance for this value of the boson pt, rapidity,
-  /// averaged across this and the 3 other mirror phi values. 
+  /// averaged across Collins-Soper polar decay angle at this and the 3
+  /// other mirror phi values. 
   ///
   /// If normalise_to_Born is false, then the result is such that for a
   /// scalar decay, after integration of the decay angles, the events
@@ -852,8 +860,19 @@ public:
     RealRange born_ptmin_rap_allowed = rap_allowed_costheta(yB, 0.0, mB, phivals[0]) && born_ptmin_allowed;
     double born_acceptance_sum = born_ptmin_rap_allowed.extent();
     return acceptance_sum / (4*born_acceptance_sum);
-
   }
+
+  /// returns the acceptance for a scalar decay for a "Born" boson, i.e.
+  /// one with zero pt but the same rapidity as this boson
+  double scalar_acceptance_Born(const Boson & b) const {
+    double yB  = b.rap();
+    double mB  = b.m();
+    double phi = 0.0;
+    RealRange born_ptmin_allowed = !ptsoft_vetoed_costheta(_ptsoft, 0.0, mB, phi);
+    RealRange born_ptmin_rap_allowed = rap_allowed_costheta(yB, 0.0, mB, phi) && born_ptmin_allowed;
+    return born_ptmin_rap_allowed.extent();
+  }
+
 
 };
 
