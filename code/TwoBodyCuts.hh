@@ -763,6 +763,100 @@ private:
 
 };
 
+/// A class that implements cuts on the pt of the softer boson decay
+/// product and on the rapidities of both decay products. It provides
+/// information on the acceptance, which can be used to defiducialise
+/// the acceptance for a scalar boson decay.
+///
+/// This class should be used as follows
+///
+///     CutsDefid cuts_defid(ptsoft_min); 
+///     // [... add rapidity cuts usual ...] 
+///     // Decide whether you want to normalise to the Born acceptance. 
+///     // (see scalar_acceptance_four_phi(...) documentation for details)
+///     bool normalise_to_Born = true;
+///
+///     // then, inside event loop: 
+///     bool accept = cuts_defid.pass(boson); 
+///     if (accept) {
+///       double weight = 1.0 / cuts_defid.scalar_acceptance_four_phi(boson, normalise_to_Born);
+///       // then bin the event with the given weight
+///     }
+///
+/// If you use the idea of defiducialisation, you should refer also to
+/// A. Glazov, arXiv:2001.02933 (Eur.Phys.J.C 80 (2020) 9, 875).
+///
+/// The idea of normalising to a rapidity-dependent result was suggested
+/// by the referee of arXiv:2106.08329.
+///
+class CutsDefid : public CutsCBIPtRap {
+public:
+
+  CutsDefid(double ptsoft) : CutsCBIPtRap(ptsoft, 0.0, CutsCBIPtRap::default_greed) {}
+
+  bool pass(const Boson & b) const override {
+    // first apply the non-negotiable cuts
+    if (!pass_other(b)) return false;
+    double ptmin = std::min(b.p1.pt(), b.p2.pt());
+    if (ptmin < _ptsoft) return false;
+
+    return true;
+  }
+
+  /// Returns the acceptance for this value of the boson pt, rapidity,
+  /// averaged across this and the 3 other mirror phi values. 
+  ///
+  /// If normalise_to_Born is false, then the result is such that for a
+  /// scalar decay, after integration of the decay angles, the events
+  /// weights (calculated as one over the return value of this function)
+  /// exactly cancel the acceptance. This can be used for obtaining
+  /// total Higgs cross section in a given Higgs rapidity window,
+  /// without the need to know anything about the rapidity distribution
+  /// of the Higgs boson. Beware, this should not be used for Higgs
+  /// bosons close to the maximum allowed photon pseudorapidity, because
+  /// the acceptance tends to zero, and so the event weights would
+  /// diverge
+  ///
+  /// If normalise_to_Born is true, the result is returned normalised to
+  /// the Born acceptance for that rapidity. This can be useful so as to
+  /// avoid giving a very large weight to events that are close to the
+  /// edge of the rapidity region. 
+  ///
+  double scalar_acceptance_four_phi(const Boson & b, bool normalise_to_Born = false) const {
+    double yB  = b.rap();
+    double ptB = b.pt();
+    double mB  = b.m();
+    double phi = b.decay_phi_0topi();
+    double pi_phi = pi - phi;
+    // the four phi values we will investigate
+    // (i.e. the original one and the reflected ones)
+    constexpr unsigned nphi = 4;
+    std::array<double,nphi> phivals {{phi, pi_phi, pi/2 - std::min(phi,pi_phi), pi/2 + std::min(phi,pi_phi)}};
+
+    double acceptance_sum = 0.0;
+    for (unsigned i = 0; i < nphi; i++) {
+      RealRange ptmin_allowed = !ptsoft_vetoed_costheta(_ptsoft, ptB, mB, phivals[i]);
+      RealRange ptmin_rap_allowed = rap_allowed_costheta(yB, ptB, mB, phivals[i]) && ptmin_allowed;
+
+      acceptance_sum += ptmin_rap_allowed.extent();
+    }
+
+    if (! normalise_to_Born) {
+      return acceptance_sum / nphi;
+    } 
+
+    // to get a result normalised to the Born acceptance, we can use the fact that
+    // the Born acceptance does not depend on phi, so we need only consider one 
+    // of the phi values
+    RealRange born_ptmin_allowed = !ptsoft_vetoed_costheta(_ptsoft, 0.0, mB, phivals[0]);
+    RealRange born_ptmin_rap_allowed = rap_allowed_costheta(yB, 0.0, mB, phivals[0]) && born_ptmin_allowed;
+    double born_acceptance_sum = born_ptmin_rap_allowed.extent();
+    return acceptance_sum / (4*born_acceptance_sum);
+
+  }
+
+};
+
 } // end of tbc namespace
 
 #endif // __TWOBODYCUTS_HH__
