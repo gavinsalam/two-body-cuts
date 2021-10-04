@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
   // the same transverse momentum cut applied will be applied to both
   // decay photons (or equivalently it's a cut on the soft photon pt)
-  CutsDefid cuts_defid(0.25);
+  CutsDefid4Phi cuts_defid(0.25);
   // add in the info about the rapidity cuts
   cuts_defid.add_upper_absrap_cut(ymax);
   cuts_defid.add_absrap_exclusion(yband_lo, yband_hi);

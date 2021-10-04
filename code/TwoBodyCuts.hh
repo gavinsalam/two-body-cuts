@@ -789,10 +789,10 @@ private:
 /// The idea of normalising to a rapidity-dependent result was suggested
 /// by the referee of arXiv:2106.08329.
 ///
-class CutsDefid : public CutsCBIPtRap {
+class CutsDefid4Phi : public CutsCBIPtRap {
 public:
 
-  CutsDefid(double ptsoft) : CutsCBIPtRap(ptsoft, 0.0, CutsCBIPtRap::default_greed) {}
+  CutsDefid4Phi(double ptsoft) : CutsCBIPtRap(ptsoft, 0.0, CutsCBIPtRap::default_greed) {}
 
   bool pass(const Boson & b) const override {
     // first apply the non-negotiable cuts
@@ -805,7 +805,7 @@ public:
 
   std::string description() const override {
     std::ostringstream ostr; 
-    ostr << "Defiducialisable symmetric cut with ptmin >= " << _ptsoft 
+    ostr << "Defiducialisable (4-phi) symmetric cut with ptmin >= " << _ptsoft 
          << " and rapidity cuts = " << _selector.description();
     return ostr.str();
   }

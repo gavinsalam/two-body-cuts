@@ -28,7 +28,7 @@ Various examples are provided:
   illustrating also the use of the CBI<sub>H,DY</sub> cuts shown in section 6 of the paper.
 
 - [code/example4.cc](code/example4.cc): a program to illustrate the use of 
-  defiducialisation for Higgs decays with symmetric cuts.
+  (4-phi) defiducialisation for Higgs decays with symmetric cuts.
 
 See the start of each file for instructions on building and running the
 executables.
