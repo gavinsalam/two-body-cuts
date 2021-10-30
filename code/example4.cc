@@ -1,4 +1,4 @@
-/// example3.cc:
+/// example4.cc:
 ///
 /// Example program to illustrate a Monte Carlo evaluation of cut
 /// efficiencies for a given choice of Higgs kinematics (i.e. Higgs pt,
