@@ -2,6 +2,8 @@
 
 ![](https://img.shields.io/badge/C%2B%2B-11-green)
 [![](https://img.shields.io/badge/arXiv-2106.08329-blue)](https://arxiv.org/abs/2106.08329)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6081155.svg)](https://doi.org/10.5281/zenodo.6081155)
+
 
 
 Code that implements a variety of cuts for selecting two-body kinematics
